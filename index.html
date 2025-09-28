@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Счётчик до встречи</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #6dd5fa, #2980b9);
+      color: #fff;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 20px;
+    }
+    .countdown {
+      font-size: 3.5em;
+      font-weight: bold;
+      background: rgba(255,255,255,0.15);
+      padding: 20px 40px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .date-input {
+      margin-top: 30px;
+    }
+    input[type="date"] {
+      padding: 8px 15px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Сколько осталось до встречи 👋</h1>
+  <div class="countdown" id="countdown">—</div>
+
+  <div class="date-input">
+    <label for="date">Выбери дату встречи: </label>
+    <input type="date" id="date" />
+  </div>
+
+  <script>
+    const countdownEl = document.getElementById('countdown');
+    const dateInput = document.getElementById('date');
+
+    // По умолчанию — через 51 день
+    let targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() + 51);
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetDate - now;
+      if (diff <= 0) {
+        countdownEl.textContent = 'Встреча уже сегодня! 🎉';
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      countdownEl.textContent = `${days}д ${hours}ч ${minutes}м ${seconds}с`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // Если пользователь выбирает дату вручную
+    dateInput.addEventListener('change', (e) => {
+      targetDate = new Date(e.target.value);
+      updateCountdown();
+    });
+  </script>
+</body>
+</html>
