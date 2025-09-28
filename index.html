@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Стимпанк Таймер</title>
+    <title>Таймер до 15 ноября 2025</title>
     <style>
         * {
             margin: 0;
@@ -12,82 +12,43 @@
         }
 
         body {
-            font-family: 'Cinzel', 'Times New Roman', serif;
-            background: #1a1208 url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23333' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
-            color: #d4af37;
+            font-family: 'Orbitron', monospace;
+            background: #0a0a0a;
+            color: #e0e0e0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            padding: 20px;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 800px;
-            width: 100%;
-            text-align: center;
-            background: rgba(26, 18, 8, 0.85);
-            border: 8px solid #8b4513;
-            border-radius: 15px;
-            box-shadow: 0 0 30px rgba(139, 69, 19, 0.7);
-            padding: 30px;
+            overflow: hidden;
             position: relative;
-            z-index: 1;
         }
 
-        .container::before {
-            content: "";
+        .background {
             position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            border: 4px solid #d4af37;
-            border-radius: 20px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: -1;
-            pointer-events: none;
+            opacity: 0.1;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            letter-spacing: 2px;
-        }
-
-        .timer-display {
-            font-size: 3.5rem;
-            margin: 30px 0;
-            font-family: 'Orbitron', monospace;
-            color: #f0e68c;
-            text-shadow: 0 0 10px rgba(240, 230, 140, 0.7);
-            background: rgba(0, 0, 0, 0.5);
-            padding: 15px;
-            border-radius: 10px;
-            border: 3px solid #8b4513;
-        }
-
-        .sandglass-container {
-            position: relative;
-            width: 200px;
-            height: 300px;
-            margin: 0 auto 30px;
-        }
-
-        .sandglass {
-            position: relative;
-            width: 200px;
-            height: 300px;
+        .sandglass-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 500px;
+            z-index: -1;
         }
 
         .glass {
             position: absolute;
-            width: 120px;
-            height: 120px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 8px solid #8b4513;
+            width: 180px;
+            height: 180px;
+            border: 4px solid #444;
             border-radius: 50%;
             left: 50%;
             transform: translateX(-50%);
@@ -96,20 +57,20 @@
 
         .glass-top {
             top: 0;
-            border-bottom: 4px solid #8b4513;
+            border-bottom: 2px solid #444;
         }
 
         .glass-bottom {
             bottom: 0;
-            border-top: 4px solid #8b4513;
+            border-top: 2px solid #444;
         }
 
         .neck {
             position: absolute;
-            width: 30px;
-            height: 60px;
-            background: #8b4513;
-            border-radius: 15px;
+            width: 40px;
+            height: 80px;
+            background: #444;
+            border-radius: 20px;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
@@ -119,27 +80,55 @@
         .sand {
             position: absolute;
             width: 100%;
-            background: linear-gradient(to bottom, #d4af37, #b8860b);
-            transition: height 1s linear;
         }
 
         .sand-top {
             bottom: 0;
             height: 100%;
-            border-radius: 0 0 50px 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
         }
 
         .sand-bottom {
             top: 0;
             height: 0%;
-            border-radius: 50px 50px 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .penguin {
+            font-size: 20px;
+            margin: 2px 0;
+            opacity: 0.8;
+            animation: fall 3s linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(1000%);
+                opacity: 0;
+            }
         }
 
         .stand {
             position: absolute;
-            width: 200px;
+            width: 300px;
             height: 20px;
-            background: #8b4513;
+            background: #444;
             border-radius: 10px;
             bottom: -30px;
             left: 0;
@@ -149,285 +138,381 @@
             content: "";
             position: absolute;
             width: 10px;
-            height: 100px;
-            background: #8b4513;
-            top: -100px;
+            height: 120px;
+            background: #444;
+            top: -120px;
             border-radius: 5px;
         }
 
         .stand::before {
-            left: 30px;
+            left: 50px;
             transform: rotate(-10deg);
         }
 
         .stand::after {
-            right: 30px;
+            right: 50px;
             transform: rotate(10deg);
         }
 
-        .controls {
+        .timer-container {
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            background: rgba(20, 20, 20, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 100, 200, 0.3);
+            border: 2px solid #333;
+        }
+
+        .flip-clock {
+            display: flex;
             gap: 15px;
-            margin-top: 20px;
+            margin: 30px 0;
         }
 
-        input[type="datetime-local"] {
-            padding: 10px;
-            font-size: 1rem;
-            background: rgba(0, 0, 0, 0.7);
-            border: 2px solid #8b4513;
-            border-radius: 5px;
-            color: #d4af37;
-            text-align: center;
+        .flip-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        button {
-            padding: 12px 25px;
-            font-size: 1.1rem;
-            background: #8b4513;
-            color: #d4af37;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Cinzel', serif;
+        .flip-card {
+            position: relative;
+            width: 80px;
+            height: 100px;
+            perspective: 1000px;
+            margin-bottom: 10px;
+        }
+
+        .flip-top, .flip-bottom {
+            position: absolute;
+            width: 100%;
+            height: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #111;
+            border: 1px solid #333;
+            color: #4fc3f7;
+            font-size: 3.5rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(79, 195, 247, 0.7);
+        }
+
+        .flip-top {
+            top: 0;
+            border-radius: 8px 8px 0 0;
+            border-bottom: 1px solid #222;
+            align-items: flex-end;
+            padding-bottom: 5px;
+        }
+
+        .flip-bottom {
+            bottom: 0;
+            border-radius: 0 0 8px 8px;
+            align-items: flex-start;
+            padding-top: 5px;
+        }
+
+        .flip-top::before, .flip-bottom::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: #000;
+            z-index: 2;
+        }
+
+        .flip-top::before {
+            bottom: 0;
+        }
+
+        .flip-label {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 5px;
+            text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        button:hover {
-            background: #a0522d;
-            transform: scale(1.05);
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        .flip-card.flipping .flip-top {
+            animation: flip-top 0.5s ease-in-out;
         }
 
-        .current-target {
+        .flip-card.flipping .flip-bottom {
+            animation: flip-bottom 0.5s ease-in-out;
+        }
+
+        @keyframes flip-top {
+            0% {
+                transform: rotateX(0deg);
+            }
+            100% {
+                transform: rotateX(-90deg);
+            }
+        }
+
+        @keyframes flip-bottom {
+            0% {
+                transform: rotateX(90deg);
+            }
+            100% {
+                transform: rotateX(0deg);
+            }
+        }
+
+        .date-info {
             margin-top: 20px;
             font-size: 1.2rem;
-            color: #f0e68c;
-        }
-
-        .gears {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .gear {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            background: transparent;
-            border-radius: 50%;
-            border: 10px solid #8b4513;
-            animation: rotate 20s linear infinite;
-        }
-
-        .gear::before {
-            content: "";
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background: #1a1208;
-            border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .gear::after {
-            content: "";
-            position: absolute;
-            width: 10px;
-            height: 80px;
-            background: #8b4513;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .gear:nth-child(1) {
-            top: 10%;
-            left: 10%;
-            animation-duration: 25s;
-        }
-
-        .gear:nth-child(2) {
-            top: 70%;
-            right: 10%;
-            animation-duration: 30s;
-            animation-direction: reverse;
-        }
-
-        .gear:nth-child(3) {
-            bottom: 20%;
-            left: 20%;
-            width: 60px;
-            height: 60px;
-            animation-duration: 15s;
-        }
-
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
+            color: #4fc3f7;
+            text-align: center;
         }
 
         @media (max-width: 600px) {
-            .timer-display {
+            .flip-clock {
+                gap: 10px;
+            }
+            
+            .flip-card {
+                width: 60px;
+                height: 80px;
+            }
+            
+            .flip-top, .flip-bottom {
                 font-size: 2.5rem;
             }
             
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .sandglass-container {
-                width: 150px;
-                height: 225px;
-            }
-            
-            .sandglass {
-                width: 150px;
-                height: 225px;
+            .sandglass-bg {
+                width: 200px;
+                height: 350px;
             }
             
             .glass {
-                width: 90px;
-                height: 90px;
+                width: 120px;
+                height: 120px;
             }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="gears">
-        <div class="gear"></div>
-        <div class="gear"></div>
-        <div class="gear"></div>
+    <div class="background">
+        <div class="sandglass-bg">
+            <div class="glass glass-top">
+                <div class="sand sand-top" id="topSand">
+                    <!-- Пингвины будут добавляться через JS -->
+                </div>
+            </div>
+            <div class="neck"></div>
+            <div class="glass glass-bottom">
+                <div class="sand sand-bottom" id="bottomSand">
+                    <!-- Пингвины будут добавляться через JS -->
+                </div>
+            </div>
+            <div class="stand"></div>
+        </div>
     </div>
     
-    <div class="container">
-        <h1>СТИМПАНК ТАЙМЕР</h1>
-        
-        <div class="sandglass-container">
-            <div class="sandglass">
-                <div class="glass glass-top">
-                    <div class="sand sand-top" id="topSand"></div>
+    <div class="timer-container">
+        <div class="flip-clock">
+            <div class="flip-unit">
+                <div class="flip-card" id="days-card">
+                    <div class="flip-top" id="days-top">00</div>
+                    <div class="flip-bottom" id="days-bottom">00</div>
                 </div>
-                <div class="neck"></div>
-                <div class="glass glass-bottom">
-                    <div class="sand sand-bottom" id="bottomSand"></div>
+                <div class="flip-label">Дней</div>
+            </div>
+            
+            <div class="flip-unit">
+                <div class="flip-card" id="hours-card">
+                    <div class="flip-top" id="hours-top">00</div>
+                    <div class="flip-bottom" id="hours-bottom">00</div>
                 </div>
-                <div class="stand"></div>
+                <div class="flip-label">Часов</div>
+            </div>
+            
+            <div class="flip-unit">
+                <div class="flip-card" id="minutes-card">
+                    <div class="flip-top" id="minutes-top">00</div>
+                    <div class="flip-bottom" id="minutes-bottom">00</div>
+                </div>
+                <div class="flip-label">Минут</div>
+            </div>
+            
+            <div class="flip-unit">
+                <div class="flip-card" id="seconds-card">
+                    <div class="flip-top" id="seconds-top">00</div>
+                    <div class="flip-bottom" id="seconds-bottom">00</div>
+                </div>
+                <div class="flip-label">Секунд</div>
             </div>
         </div>
         
-        <div class="timer-display" id="timer">00:00:00:00</div>
-        
-        <div class="controls">
-            <input type="datetime-local" id="targetDate">
-            <button id="setDate">Установить дату</button>
-        </div>
-        
-        <div class="current-target" id="currentTarget"></div>
+        <div class="date-info">До 15 ноября 2025, 11:00</div>
     </div>
 
     <script>
-        // Элементы DOM
-        const timerElement = document.getElementById('timer');
-        const targetDateInput = document.getElementById('targetDate');
-        const setDateButton = document.getElementById('setDate');
-        const currentTargetElement = document.getElementById('currentTarget');
+        // Целевая дата: 15 ноября 2025, 11:00
+        const targetDate = new Date('2025-11-15T11:00:00');
+        
+        // Элементы DOM для перекидных часов
+        const daysTop = document.getElementById('days-top');
+        const daysBottom = document.getElementById('days-bottom');
+        const hoursTop = document.getElementById('hours-top');
+        const hoursBottom = document.getElementById('hours-bottom');
+        const minutesTop = document.getElementById('minutes-top');
+        const minutesBottom = document.getElementById('minutes-bottom');
+        const secondsTop = document.getElementById('seconds-top');
+        const secondsBottom = document.getElementById('seconds-bottom');
+        
+        // Элементы для анимации песочных часов
         const topSand = document.getElementById('topSand');
         const bottomSand = document.getElementById('bottomSand');
-
-        // Установка минимальной даты (текущая дата)
-        const now = new Date();
-        const minDate = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-        targetDateInput.min = minDate;
-
-        // Загрузка сохраненной даты из localStorage
-        let targetDate = localStorage.getItem('targetDate');
-        if (targetDate) {
-            targetDateInput.value = targetDate;
-            updateCurrentTargetDisplay();
+        
+        // Предыдущие значения для анимации переворота
+        let prevDays = 0;
+        let prevHours = 0;
+        let prevMinutes = 0;
+        let prevSeconds = 0;
+        
+        // Создание пингвинов для анимации
+        function createPenguins() {
+            // Очищаем контейнеры
+            topSand.innerHTML = '';
+            bottomSand.innerHTML = '';
+            
+            // Создаем пингвинов для верхней части
+            for (let i = 0; i < 20; i++) {
+                const penguin = document.createElement('div');
+                penguin.className = 'penguin';
+                penguin.textContent = '🐧';
+                penguin.style.animationDelay = `${Math.random() * 5}s`;
+                topSand.appendChild(penguin);
+            }
+            
+            // Создаем пингвинов для нижней части
+            for (let i = 0; i < 5; i++) {
+                const penguin = document.createElement('div');
+                penguin.className = 'penguin';
+                penguin.textContent = '🐧';
+                penguin.style.animationDelay = `${Math.random() * 5}s`;
+                bottomSand.appendChild(penguin);
+            }
         }
-
+        
         // Функция обновления таймера
         function updateTimer() {
-            if (!targetDate) {
-                timerElement.textContent = "00:00:00:00";
-                return;
-            }
-
             const now = new Date().getTime();
-            const target = new Date(targetDate).getTime();
-            const difference = target - now;
-
+            const difference = targetDate - now;
+            
             if (difference <= 0) {
-                timerElement.textContent = "00:00:00:00";
-                topSand.style.height = "0%";
-                bottomSand.style.height = "100%";
+                // Время истекло
+                daysTop.textContent = '00';
+                daysBottom.textContent = '00';
+                hoursTop.textContent = '00';
+                hoursBottom.textContent = '00';
+                minutesTop.textContent = '00';
+                minutesBottom.textContent = '00';
+                secondsTop.textContent = '00';
+                secondsBottom.textContent = '00';
                 return;
             }
-
+            
             // Расчет дней, часов, минут и секунд
             const days = Math.floor(difference / (1000 * 60 * 60 * 24));
             const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-            // Форматирование времени
-            timerElement.textContent = 
-                `${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-            // Обновление анимации песочных часов
-            updateSandAnimation(difference, target - new Date(localStorage.getItem('initialDate') || now).getTime());
-        }
-
-        // Функция обновления анимации песочных часов
-        function updateSandAnimation(timeLeft, totalTime) {
-            if (totalTime <= 0) return;
             
+            // Форматирование времени с ведущими нулями
+            const daysStr = days.toString().padStart(2, '0');
+            const hoursStr = hours.toString().padStart(2, '0');
+            const minutesStr = minutes.toString().padStart(2, '0');
+            const secondsStr = seconds.toString().padStart(2, '0');
+            
+            // Обновление перекидных часов с анимацией
+            updateFlipCard('days', daysStr, daysTop, daysBottom, prevDays, days);
+            updateFlipCard('hours', hoursStr, hoursTop, hoursBottom, prevHours, hours);
+            updateFlipCard('minutes', minutesStr, minutesTop, minutesBottom, prevMinutes, minutes);
+            updateFlipCard('seconds', secondsStr, secondsTop, secondsBottom, prevSeconds, seconds);
+            
+            // Сохранение текущих значений для следующего обновления
+            prevDays = days;
+            prevHours = hours;
+            prevMinutes = minutes;
+            prevSeconds = seconds;
+            
+            // Обновление анимации песочных часов
+            updateSandAnimation(difference);
+        }
+        
+        // Функция обновления перекидной карточки с анимацией
+        function updateFlipCard(unit, newValue, topElement, bottomElement, prevValue, currentValue) {
+            if (prevValue !== currentValue) {
+                // Добавляем класс для анимации
+                const card = document.getElementById(`${unit}-card`);
+                card.classList.add('flipping');
+                
+                // Обновляем значения
+                topElement.textContent = newValue;
+                bottomElement.textContent = newValue;
+                
+                // Удаляем класс анимации после завершения
+                setTimeout(() => {
+                    card.classList.remove('flipping');
+                }, 500);
+            }
+        }
+        
+        // Функция обновления анимации песочных часов
+        function updateSandAnimation(timeLeft) {
+            // Общее время от 28.09.2025 до 15.11.2025
+            const startDate = new Date('2025-09-28T00:00:00');
+            const totalTime = targetDate - startDate;
+            
+            // Процент оставшегося времени
             const sandPercentage = (1 - timeLeft / totalTime) * 100;
+            
+            // Обновляем высоту "песка" (пингвинов)
             topSand.style.height = `${Math.max(0, 100 - sandPercentage)}%`;
             bottomSand.style.height = `${Math.min(100, sandPercentage)}%`;
-        }
-
-        // Функция обновления отображения текущей целевой даты
-        function updateCurrentTargetDisplay() {
-            if (targetDate) {
-                const date = new Date(targetDate);
-                currentTargetElement.textContent = `Отсчет до: ${date.toLocaleString('ru-RU')}`;
-            } else {
-                currentTargetElement.textContent = 'Целевая дата не установлена';
+            
+            // Добавляем/удаляем пингвинов в зависимости от процента
+            const topPenguins = topSand.querySelectorAll('.penguin').length;
+            const bottomPenguins = bottomSand.querySelectorAll('.penguin').length;
+            
+            // Верхняя часть - уменьшаем количество пингвинов
+            if (topPenguins > 0 && sandPercentage > 5) {
+                const toRemove = Math.floor(topPenguins * 0.05);
+                for (let i = 0; i < toRemove && topPenguins > 5; i++) {
+                    if (topSand.lastChild) {
+                        topSand.removeChild(topSand.lastChild);
+                    }
+                }
+            }
+            
+            // Нижняя часть - добавляем пингвинов
+            if (bottomPenguins < 20 && sandPercentage > 5) {
+                const toAdd = Math.floor((20 - bottomPenguins) * 0.05);
+                for (let i = 0; i < toAdd; i++) {
+                    const penguin = document.createElement('div');
+                    penguin.className = 'penguin';
+                    penguin.textContent = '🐧';
+                    penguin.style.animationDelay = `${Math.random() * 5}s`;
+                    bottomSand.appendChild(penguin);
+                }
             }
         }
-
-        // Обработчик установки даты
-        setDateButton.addEventListener('click', function() {
-            if (targetDateInput.value) {
-                targetDate = targetDateInput.value;
-                localStorage.setItem('targetDate', targetDate);
-                localStorage.setItem('initialDate', new Date().toISOString());
-                updateCurrentTargetDisplay();
-            } else {
-                alert('Пожалуйста, выберите дату и время');
-            }
-        });
-
+        
+        // Инициализация
+        createPenguins();
+        updateTimer();
+        
         // Запуск таймера
         setInterval(updateTimer, 1000);
-        updateTimer();
-        updateCurrentTargetDisplay();
     </script>
 </body>
 </html>
