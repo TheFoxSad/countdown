@@ -1,331 +1,574 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Песочные часы — до 15 ноября 2025</title>
-  <style>
-    :root{--bg:#0b1220;--card:#0f1724;--accent:#6ee7b7;--muted:#9aa4b2}
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0}
-    body{
-      background:linear-gradient(180deg,#071022 0%, #07142a 60%);
-      color:#e6eef6; font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
-      display:flex;align-items:center;justify-content:center;padding:24px;
-    }
-    .wrap{width:100%;max-width:920px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:22px;box-shadow:0 8px 40px rgba(2,6,23,0.7);display:grid;grid-template-columns:1fr 360px;gap:18px;align-items:center}
-    h1{margin:0;font-size:20px}
-    p.lead{margin:6px 0 14px;color:var(--muted)}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Таймер до 1 ноября 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    /* Left: numeric countdown */
-    .left{padding:8px 12px}
-    .nums{display:flex;gap:12px;flex-wrap:wrap}
-    .pill{background:rgba(255,255,255,0.02);padding:12px 18px;border-radius:12px;min-width:100px;text-align:center}
-    .number{font-weight:700;font-size:26px;color:var(--accent)}
-    .label{font-size:12px;color:var(--muted);margin-top:6px}
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
 
-    /* Right: hourglass */
-    .glass-wrap{display:flex;align-items:center;justify-content:center}
-    .hourglass{width:300px;height:420px;position:relative}
-    svg.hour{width:100%;height:100%;display:block}
-    .chamber{position:absolute;left:50%;transform:translateX(-50%);width:160px;height:160px;overflow:visible}
-    .top{top:46px}
-    .bottom{bottom:46px}
-    .neck{top:198px;left:50%;transform:translateX(-50%);width:24px;height:44px}
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
 
-    /* penguins as absolute items inside chambers */
-    .peng{position:absolute;width:18px;height:22px;transform-origin:center;will-change:transform,opacity}
-    .peng svg{width:100%;height:100%;display:block}
+        header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
 
-    /* stack in bottom: pengs align in rows */
-    .bottom .peng{transition:transform 600ms cubic-bezier(.2,.9,.2,1),opacity 400ms}
+        h1 {
+            font-weight: 300;
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
 
-    /* controls */
-    .meta{display:flex;gap:8px;align-items:center;margin-top:10px}
-    input[type="date"], button{background:transparent;border:1px solid rgba(255,255,255,0.06);color:inherit;padding:8px 10px;border-radius:8px}
-    button.primary{background:var(--accent);color:#032022;border:0}
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
 
-    footer{margin-top:12px;color:var(--muted);font-size:13px}
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
 
-    @media (max-width:880px){.card{grid-template-columns:1fr;}.hourglass{width:260px;height:360px}}
+        .time-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    /* dissolve animation */
-    @keyframes dissolve{
-      0%{opacity:1;transform:scale(1)}
-      100%{opacity:0;transform:scale(1.6) translateY(20px)}
-    }
-  </style>
+        .time-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .flip-clock {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .digit-container {
+            position: relative;
+            width: 60px;
+            height: 80px;
+            perspective: 300px;
+        }
+
+        .digit {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            font-weight: 300;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .digit-top {
+            top: 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transform-origin: bottom;
+            z-index: 2;
+        }
+
+        .digit-bottom {
+            bottom: 0;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            transform-origin: top;
+        }
+
+        .flip .digit-top {
+            animation: flipTop 0.5s ease-in-out;
+        }
+
+        .flip .digit-bottom {
+            animation: flipBottom 0.5s ease-in-out 0.5s;
+        }
+
+        @keyframes flipTop {
+            0% {
+                transform: rotateX(0deg);
+            }
+            100% {
+                transform: rotateX(-90deg);
+            }
+        }
+
+        @keyframes flipBottom {
+            0% {
+                transform: rotateX(90deg);
+            }
+            100% {
+                transform: rotateX(0deg);
+            }
+        }
+
+        .chat-container {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            height: 400px;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .chat-title {
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: #2c3e50;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            max-width: 80%;
+            line-height: 1.4;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .message.system {
+            align-self: flex-start;
+            background-color: #f5f5f5;
+            color: #666;
+        }
+
+        .message-info {
+            font-size: 0.75rem;
+            margin-top: 0.3rem;
+            opacity: 0.7;
+        }
+
+        .chat-input-container {
+            display: flex;
+            margin-top: 1rem;
+            gap: 0.5rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .chat-input:focus {
+            border-color: #3498db;
+        }
+
+        .send-button {
+            padding: 0.8rem 1.5rem;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .send-button:hover {
+            background-color: #2980b9;
+        }
+
+        .separator {
+            margin: 0 0.5rem;
+            font-size: 2rem;
+            color: #7f8c8d;
+            align-self: center;
+        }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .countdown-container {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            
+            .digit-container {
+                width: 50px;
+                height: 70px;
+            }
+            
+            .digit {
+                font-size: 2rem;
+            }
+            
+            .separator {
+                font-size: 1.8rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <div class="left">
-        <h1>Перекидные песочные часы — до 15 ноября 2025</h1>
-        <p class="lead">Минималистичный таймер с милыми пингвинчиками: каждый минутный тик — один пингвин падает. Каждые 60 минут они растворяются внизу.</p>
+    <div class="container">
+        <header>
+            <h1>Таймер до 1 ноября 2025 года</h1>
+            <p class="subtitle">Осталось времени до завершения срока</p>
+        </header>
 
-        <div class="nums">
-          <div class="pill"><div class="number" id="days">0</div><div class="label">Дней</div></div>
-          <div class="pill"><div class="number" id="hours">0</div><div class="label">Часов</div></div>
-          <div class="pill"><div class="number" id="minutes">0</div><div class="label">Минут</div></div>
-          <div class="pill"><div class="number" id="seconds">0</div><div class="label">Секунд</div></div>
+        <div class="countdown-container">
+            <div class="time-unit">
+                <div class="flip-clock">
+                    <div class="digit-container">
+                        <div class="digit digit-top" id="days-tens-top">0</div>
+                        <div class="digit digit-bottom" id="days-tens-bottom">0</div>
+                    </div>
+                    <div class="digit-container">
+                        <div class="digit digit-top" id="days-ones-top">0</div>
+                        <div class="digit digit-bottom" id="days-ones-bottom">0</div>
+                    </div>
+                </div>
+                <div class="time-label">Дней</div>
+            </div>
+
+            <div class="separator">:</div>
+
+            <div class="time-unit">
+                <div class="flip-clock">
+                    <div class="digit-container">
+                        <div class="digit digit-top" id="hours-tens-top">0</div>
+                        <div class="digit digit-bottom" id="hours-tens-bottom">0</div>
+                    </div>
+                    <div class="digit-container">
+                        <div class="digit digit-top" id="hours-ones-top">0</div>
+                        <div class="digit digit-bottom" id="hours-ones-bottom">0</div>
+                    </div>
+                </div>
+                <div class="time-label">Часов</div>
+            </div>
+
+            <div class="separator">:</div>
+
+            <div class="time-unit">
+                <div class="flip-clock">
+                    <div class="digit-container">
+                        <div class="digit digit-top" id="minutes-tens-top">0</div>
+                        <div class="digit digit-bottom" id="minutes-tens-bottom">0</div>
+                    </div>
+                    <div class="digit-container">
+                        <div class="digit digit-top" id="minutes-ones-top">0</div>
+                        <div class="digit digit-bottom" id="minutes-ones-bottom">0</div>
+                    </div>
+                </div>
+                <div class="time-label">Минут</div>
+            </div>
+
+            <div class="separator">:</div>
+
+            <div class="time-unit">
+                <div class="flip-clock">
+                    <div class="digit-container">
+                        <div class="digit digit-top" id="seconds-tens-top">0</div>
+                        <div class="digit digit-bottom" id="seconds-tens-bottom">0</div>
+                    </div>
+                    <div class="digit-container">
+                        <div class="digit digit-top" id="seconds-ones-top">0</div>
+                        <div class="digit digit-bottom" id="seconds-ones-bottom">0</div>
+                    </div>
+                </div>
+                <div class="time-label">Секунд</div>
+            </div>
         </div>
 
-        <div class="meta">
-          <label style="display:flex;gap:8px;align-items:center"><span style="color:var(--muted);font-size:13px">Цель</span>
-            <input id="targetName" type="text" placeholder="Встреча, дедлайн..." style="min-width:180px" />
-          </label>
-          <button id="shareBtn" class="primary">Сохранить ссылку</button>
+        <div class="chat-container">
+            <div class="chat-header">
+                <h2 class="chat-title">Комментарии</h2>
+                <span id="comment-count">0 комментариев</span>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <div class="message system">
+                    <div class="message-text">Добро пожаловать в чат! Оставьте свой комментарий ниже.</div>
+                    <div class="message-info">Система • Только что</div>
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="message-input" placeholder="Введите ваше сообщение...">
+                <button class="send-button" id="send-button">Отправить</button>
+            </div>
         </div>
 
-        <footer>Сохрани страницу (Ctrl/Cmd+S) или загрузи на GitHub Pages — ссылка сохранит дату/название в URL.</footer>
-      </div>
-
-      <div class="glass-wrap">
-        <div class="hourglass" role="img" aria-label="Песочные часы">
-          <!-- SVG рамка часов -->
-          <svg class="hour" viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs>
-              <linearGradient id="g1" x1="0" x2="1">
-                <stop offset="0%" stop-color="#6ee7b7" />
-                <stop offset="100%" stop-color="#60a5fa" />
-              </linearGradient>
-            </defs>
-            <rect x="10" y="8" width="180" height="16" rx="4" fill="rgba(255,255,255,0.03)"/>
-            <rect x="10" y="256" width="180" height="16" rx="4" fill="rgba(255,255,255,0.03)"/>
-            <path d="M40 24 C70 90,70 190,40 256" stroke="rgba(255,255,255,0.06)" stroke-width="6" fill="none" stroke-linecap="round"/>
-            <path d="M160 24 C130 90,130 190,160 256" stroke="rgba(255,255,255,0.06)" stroke-width="6" fill="none" stroke-linecap="round"/>
-            <!-- glass interior subtle -->
-            <ellipse cx="100" cy="70" rx="38" ry="16" fill="rgba(255,255,255,0.02)" />
-            <ellipse cx="100" cy="210" rx="38" ry="16" fill="rgba(255,255,255,0.02)" />
-          </svg>
-
-          <!-- top chamber: penguins will be injected here -->
-          <div class="chamber top" id="topChamber" style="width:140px;height:140px;">
-          </div>
-
-          <!-- neck indicator (visual only) -->
-          <div class="neck" aria-hidden="true"></div>
-
-          <!-- bottom chamber -->
-          <div class="chamber bottom" id="bottomChamber" style="width:140px;height:140px;">
-          </div>
-        </div>
-      </div>
+        <footer>
+            <p>Таймер обновляется в реальном времени • Московское время (UTC+3)</p>
+        </footer>
     </div>
-  </div>
 
-  <script>
-    // Target date: 15 Nov 2025 00:00 local time
-    const target = new Date('2025-11-15T00:00:00');
-
-    const daysEl = document.getElementById('days');
-    const hoursEl = document.getElementById('hours');
-    const minutesEl = document.getElementById('minutes');
-    const secondsEl = document.getElementById('seconds');
-    const topChamber = document.getElementById('topChamber');
-    const bottomChamber = document.getElementById('bottomChamber');
-    const targetName = document.getElementById('targetName');
-    const shareBtn = document.getElementById('shareBtn');
-
-    // Keep arrays of penguins
-    let bottomPengs = []; // DOM elements
-    let topPengsCount = 0; // visual count in top
-
-    // simple penguin SVG as a string
-    function penguinSVG(){
-      return `
-      <svg viewBox="0 0 64 80" xmlns="http://www.w3.org/2000/svg">
-        <g>
-          <ellipse cx="32" cy="42" rx="20" ry="26" fill="#0f1724" />
-          <ellipse cx="32" cy="42" rx="12" ry="18" fill="#fff" />
-          <circle cx="24" cy="36" r="3" fill="#08121a" />
-          <circle cx="40" cy="36" r="3" fill="#08121a" />
-          <path d="M32 50 l-5 6 l10 0 z" fill="#f6b26b" />
-        </g>
-      </svg>`;
-    }
-
-    // Create a penguin element positioned in top chamber (not yet animated)
-    function createPeng(position){
-      const el = document.createElement('div');
-      el.className = 'peng';
-      el.innerHTML = penguinSVG();
-      // random x within chamber width
-      const chamberW = topChamber.clientWidth || 140;
-      const x = 10 + Math.random()*(chamberW-36);
-      el.style.left = x + 'px';
-      el.style.top = (10 + Math.random()*40) + 'px';
-      el.style.opacity = '1';
-      topChamber.appendChild(el);
-      topPengsCount++;
-      return el;
-    }
-
-    // Drop one peng from top to bottom with animation
-    function dropOnePeng(){
-      // pick or create a top penguin
-      let t = topChamber.querySelector('.peng');
-      if(!t){
-        t = createPeng();
-      }
-      // compute bottom target position (stack)
-      const idx = bottomPengs.length;
-      const cols = 7; // penguins per row
-      const row = Math.floor(idx/cols);
-      const col = idx % cols;
-      const cellW = 18; const cellH = 22; const gap = 4;
-      const bottomW = bottomChamber.clientWidth || 140;
-      const baseLeft = (bottomW - (cols*cellW + (cols-1)*gap))/2;
-      const targetX = baseLeft + col*(cellW+gap);
-      const targetY = bottomChamber.clientHeight - (row+1)*(cellH+gap) - 6;
-
-      // get current position of t relative to hourglass
-      const startRect = t.getBoundingClientRect();
-      const containerRect = topChamber.getBoundingClientRect();
-
-      // convert to chamber coordinates
-      const startX = parseFloat(t.style.left || 0);
-      const startY = parseFloat(t.style.top || 0);
-
-      // animate using transform
-      t.style.transition = 'transform 900ms cubic-bezier(.2,.9,.2,1), opacity 600ms linear';
-      const dx = (targetX - startX);
-      const dy = ( (bottomChamber.offsetTop - topChamber.offsetTop) + targetY - startY );
-      t.style.transform = `translate(${dx}px, ${dy}px) scale(0.95)`;
-
-      // after animation ends, move it into bottom chamber and position absolutely inside bottom
-      setTimeout(()=>{
-        // cleanup transform
-        t.style.transition = '';
-        t.style.transform = '';
-        // remove from top
-        topChamber.removeChild(t);
-        // place in bottom
-        t.style.left = targetX + 'px';
-        t.style.top = targetY + 'px';
-        bottomChamber.appendChild(t);
-        bottomPengs.push(t);
-        rearrangeBottom();
-      }, 950);
-    }
-
-    // Rearrange bottom penguins smoothly (stack them)
-    function rearrangeBottom(){
-      const cols = 7; const cellW = 18; const cellH = 22; const gap = 4;
-      const bottomW = bottomChamber.clientWidth || 140;
-      const baseLeft = (bottomW - (cols*cellW + (cols-1)*gap))/2;
-      bottomPengs.forEach((p, idx)=>{
-        const row = Math.floor(idx/cols);
-        const col = idx % cols;
-        const x = baseLeft + col*(cellW+gap);
-        const y = bottomChamber.clientHeight - (row+1)*(cellH+gap) - 6;
-        p.style.transform = `translate(${x - parseFloat(p.style.left || 0)}px, ${y - parseFloat(p.style.top || 0)}px)`;
-        // after transition reset absolute coords
-        setTimeout(()=>{
-          p.style.transform = '';
-          p.style.left = x + 'px';
-          p.style.top = y + 'px';
-        }, 620);
-      });
-    }
-
-    // dissolve bottom penguins (called each hour)
-    function dissolveBottom(){
-      bottomPengs.forEach((p, i)=>{
-        p.style.animation = `dissolve 800ms ease ${i*14}ms forwards`;
-      });
-      setTimeout(()=>{
-        bottomPengs.forEach(p=>{ if(p.parentNode) p.parentNode.removeChild(p); });
-        bottomPengs = [];
-      }, 1400 + bottomPengs.length*14);
-    }
-
-    // initialize top chamber with 60 - minutesPassedInHour pengs visually
-    function initPenguins(){
-      const now = new Date();
-      const minutesPast = now.getMinutes();
-      // bottom should have minutesPast pengs stacked
-      for(let i=0;i<minutesPast;i++){
-        const p = document.createElement('div'); p.className='peng'; p.innerHTML = penguinSVG();
-        // compute position
-        const cols = 7; const cellW = 18; const gap = 4;
-        const bottomW = bottomChamber.clientWidth || 140; const baseLeft = (bottomW - (cols*cellW + (cols-1)*gap))/2;
-        const row = Math.floor(i/cols); const col = i%cols;
-        const x = baseLeft + col*(cellW+gap);
-        const y = bottomChamber.clientHeight - (row+1)*(cellW+gap) - 6;
-        p.style.left = x + 'px'; p.style.top = y + 'px';
-        bottomChamber.appendChild(p);
-        bottomPengs.push(p);
-      }
-      // fill top with remaining to 60
-      const topNeed = 60 - minutesPast;
-      for(let i=0;i<Math.min(12, topNeed); i++){
-        const p = document.createElement('div'); p.className='peng'; p.innerHTML = penguinSVG();
-        p.style.left = (12 + i*20) + 'px'; p.style.top = (12 + (i%3)*16) + 'px';
-        topChamber.appendChild(p);
-      }
-    }
-
-    // Update numeric countdown
-    function updateNumbers(){
-      const now = new Date();
-      let diff = target - now;
-      if(diff<=0){ daysEl.textContent='0'; hoursEl.textContent='0'; minutesEl.textContent='0'; secondsEl.textContent='0'; return; }
-      const s = Math.floor(diff/1000);
-      const days = Math.floor(s/86400); const hours = Math.floor((s%86400)/3600);
-      const mins = Math.floor((s%3600)/60); const secs = s%60;
-      daysEl.textContent = days; hoursEl.textContent=hours; minutesEl.textContent=mins; secondsEl.textContent=secs;
-    }
-
-    // main tick every second, but we care about minute changes
-    let lastMinute = new Date().getMinutes();
-    function tick(){
-      updateNumbers();
-      const now = new Date();
-      const m = now.getMinutes();
-      if(m !== lastMinute){
-        // minute changed -> drop one
-        lastMinute = m;
-        dropOnePeng();
-      }
-      // if minute==0 -> new hour -> dissolve bottom
-      if(now.getMinutes()===0 && now.getSeconds()<2){
-        // small guard: trigger dissolve when minute rolls to 0
-        dissolveBottom();
-      }
-    }
-
-    // share button: encode name & target in URL
-    shareBtn.addEventListener('click', ()=>{
-      const name = targetName.value || '';
-      const u = new URL(location.href);
-      u.searchParams.set('t', name);
-      u.searchParams.set('d', target.toISOString());
-      history.replaceState(null,null,u.toString());
-      alert('Ссылка сохранена в адресной строке. Сохрани страницу и отправь её коллеге.');
-    });
-
-    // restore from URL
-    (function restoreFromURL(){
-      const p = new URLSearchParams(location.search);
-      if(p.get('d')){
-        const d = new Date(p.get('d'));
-        if(!isNaN(d)){
-          // override target
+    <script>
+        // Установка целевой даты: 1 ноября 2025 года, 11:00 по московскому времени
+        const targetDate = new Date('2025-11-01T11:00:00+03:00');
+        
+        // Элементы DOM для дней
+        const daysTensTop = document.getElementById('days-tens-top');
+        const daysTensBottom = document.getElementById('days-tens-bottom');
+        const daysOnesTop = document.getElementById('days-ones-top');
+        const daysOnesBottom = document.getElementById('days-ones-bottom');
+        
+        // Элементы DOM для часов
+        const hoursTensTop = document.getElementById('hours-tens-top');
+        const hoursTensBottom = document.getElementById('hours-tens-bottom');
+        const hoursOnesTop = document.getElementById('hours-ones-top');
+        const hoursOnesBottom = document.getElementById('hours-ones-bottom');
+        
+        // Элементы DOM для минут
+        const minutesTensTop = document.getElementById('minutes-tens-top');
+        const minutesTensBottom = document.getElementById('minutes-tens-bottom');
+        const minutesOnesTop = document.getElementById('minutes-ones-top');
+        const minutesOnesBottom = document.getElementById('minutes-ones-bottom');
+        
+        // Элементы DOM для секунд
+        const secondsTensTop = document.getElementById('seconds-tens-top');
+        const secondsTensBottom = document.getElementById('seconds-tens-bottom');
+        const secondsOnesTop = document.getElementById('seconds-ones-top');
+        const secondsOnesBottom = document.getElementById('seconds-ones-bottom');
+        
+        // Текущие значения
+        let currentDays = 0;
+        let currentHours = 0;
+        let currentMinutes = 0;
+        let currentSeconds = 0;
+        
+        // Функция для форматирования чисел (добавление ведущего нуля)
+        function formatTime(number) {
+            return number < 10 ? `0${number}` : number.toString();
         }
-      }
-      if(p.get('t')) targetName.value = p.get('t');
-    })();
-
-    // initial
-    initPenguins();
-    updateNumbers();
-    setInterval(tick,1000);
-
-    // responsive rearrange on resize
-    window.addEventListener('resize', ()=>{ rearrangeBottom(); });
-
-  </script>
+        
+        // Функция для обновления таймера
+        function updateCountdown() {
+            const now = new Date();
+            const timeDifference = targetDate - now;
+            
+            if (timeDifference <= 0) {
+                // Время истекло
+                document.querySelector('h1').textContent = 'Время истекло!';
+                return;
+            }
+            
+            // Вычисление дней, часов, минут и секунд
+            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+            
+            // Форматирование времени
+            const daysStr = formatTime(days);
+            const hoursStr = formatTime(hours);
+            const minutesStr = formatTime(minutes);
+            const secondsStr = formatTime(seconds);
+            
+            // Обновление дней с анимацией
+            updateDigitWithAnimation(daysStr, currentDays, daysTensTop, daysTensBottom, daysOnesTop, daysOnesBottom);
+            currentDays = daysStr;
+            
+            // Обновление часов с анимацией
+            updateDigitWithAnimation(hoursStr, currentHours, hoursTensTop, hoursTensBottom, hoursOnesTop, hoursOnesBottom);
+            currentHours = hoursStr;
+            
+            // Обновление минут с анимацией
+            updateDigitWithAnimation(minutesStr, currentMinutes, minutesTensTop, minutesTensBottom, minutesOnesTop, minutesOnesBottom);
+            currentMinutes = minutesStr;
+            
+            // Обновление секунд с анимацией
+            updateDigitWithAnimation(secondsStr, currentSeconds, secondsTensTop, secondsTensBottom, secondsOnesTop, secondsOnesBottom);
+            currentSeconds = secondsStr;
+        }
+        
+        // Функция для обновления цифр с анимацией переворота
+        function updateDigitWithAnimation(newValue, oldValue, tensTop, tensBottom, onesTop, onesBottom) {
+            if (newValue !== oldValue) {
+                const newTens = newValue.charAt(0);
+                const newOnes = newValue.charAt(1);
+                const oldTens = oldValue.charAt(0);
+                const oldOnes = oldValue.charAt(1);
+                
+                // Обновление десятков
+                if (newTens !== oldTens) {
+                    tensTop.textContent = oldTens;
+                    tensBottom.textContent = newTens;
+                    
+                    // Добавление класса для анимации
+                    tensTop.parentElement.classList.add('flip');
+                    
+                    // Удаление класса после анимации
+                    setTimeout(() => {
+                        tensTop.parentElement.classList.remove('flip');
+                        tensTop.textContent = newTens;
+                    }, 1000);
+                }
+                
+                // Обновление единиц
+                if (newOnes !== oldOnes) {
+                    onesTop.textContent = oldOnes;
+                    onesBottom.textContent = newOnes;
+                    
+                    // Добавление класса для анимации
+                    onesTop.parentElement.classList.add('flip');
+                    
+                    // Удаление класса после анимации
+                    setTimeout(() => {
+                        onesTop.parentElement.classList.remove('flip');
+                        onesTop.textContent = newOnes;
+                    }, 1000);
+                }
+            }
+        }
+        
+        // Инициализация таймера
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+        
+        // Функционал чата
+        const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const commentCount = document.getElementById('comment-count');
+        
+        // Загрузка сообщений из localStorage
+        let messages = JSON.parse(localStorage.getItem('countdownChatMessages')) || [];
+        updateChatDisplay();
+        
+        // Функция для отправки сообщения
+        function sendMessage() {
+            const messageText = messageInput.value.trim();
+            
+            if (messageText) {
+                const newMessage = {
+                    text: messageText,
+                    timestamp: new Date().toISOString(),
+                    user: 'Вы'
+                };
+                
+                messages.push(newMessage);
+                
+                // Сохранение в localStorage
+                localStorage.setItem('countdownChatMessages', JSON.stringify(messages));
+                
+                // Очистка поля ввода
+                messageInput.value = '';
+                
+                // Обновление отображения чата
+                updateChatDisplay();
+                
+                // Прокрутка к последнему сообщению
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+        
+        // Функция для обновления отображения чата
+        function updateChatDisplay() {
+            chatMessages.innerHTML = '';
+            
+            if (messages.length === 0) {
+                const welcomeMessage = document.createElement('div');
+                welcomeMessage.className = 'message system';
+                welcomeMessage.innerHTML = `
+                    <div class="message-text">Добро пожаловать в чат! Оставьте свой комментарий ниже.</div>
+                    <div class="message-info">Система • Только что</div>
+                `;
+                chatMessages.appendChild(welcomeMessage);
+            } else {
+                messages.forEach(message => {
+                    const messageElement = document.createElement('div');
+                    messageElement.className = 'message user';
+                    
+                    const date = new Date(message.timestamp);
+                    const timeString = date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                    const dateString = date.toLocaleDateString('ru-RU');
+                    
+                    messageElement.innerHTML = `
+                        <div class="message-text">${message.text}</div>
+                        <div class="message-info">${message.user} • ${dateString} ${timeString}</div>
+                    `;
+                    
+                    chatMessages.appendChild(messageElement);
+                });
+            }
+            
+            // Обновление счетчика комментариев
+            const count = messages.length;
+            commentCount.textContent = `${count} ${getPluralForm(count, ['комментарий', 'комментария', 'комментариев'])}`;
+        }
+        
+        // Функция для получения правильной формы слова в зависимости от числа
+        function getPluralForm(number, forms) {
+            const cases = [2, 0, 1, 1, 1, 2];
+            return forms[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[Math.min(number % 10, 5)]];
+        }
+        
+        // Обработчики событий для чата
+        sendButton.addEventListener('click', sendMessage);
+        
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
 </body>
 </html>
