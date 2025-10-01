@@ -362,7 +362,7 @@
 
     <script>
         // Установка целевой даты: 1 ноября 2025 года, 11:00 по московскому времени
-        const targetDate = new Date('2025-11-01T11:00:00+03:00');
+        const targetDate = new Date('November 1, 2025 11:00:00 GMT+0300');
         
         // Элементы DOM для дней
         const daysTensTop = document.getElementById('days-tens-top');
@@ -389,10 +389,10 @@
         const secondsOnesBottom = document.getElementById('seconds-ones-bottom');
         
         // Текущие значения
-        let currentDays = 0;
-        let currentHours = 0;
-        let currentMinutes = 0;
-        let currentSeconds = 0;
+        let currentDays = "00";
+        let currentHours = "00";
+        let currentMinutes = "00";
+        let currentSeconds = "00";
         
         // Функция для форматирования чисел (добавление ведущего нуля)
         function formatTime(number) {
@@ -441,41 +441,39 @@
         
         // Функция для обновления цифр с анимацией переворота
         function updateDigitWithAnimation(newValue, oldValue, tensTop, tensBottom, onesTop, onesBottom) {
-            if (newValue !== oldValue) {
-                const newTens = newValue.charAt(0);
-                const newOnes = newValue.charAt(1);
-                const oldTens = oldValue.charAt(0);
-                const oldOnes = oldValue.charAt(1);
+            const newTens = newValue.charAt(0);
+            const newOnes = newValue.charAt(1);
+            const oldTens = oldValue.charAt(0);
+            const oldOnes = oldValue.charAt(1);
+            
+            // Обновление десятков
+            if (newTens !== oldTens) {
+                tensTop.textContent = oldTens;
+                tensBottom.textContent = newTens;
                 
-                // Обновление десятков
-                if (newTens !== oldTens) {
-                    tensTop.textContent = oldTens;
-                    tensBottom.textContent = newTens;
-                    
-                    // Добавление класса для анимации
-                    tensTop.parentElement.classList.add('flip');
-                    
-                    // Удаление класса после анимации
-                    setTimeout(() => {
-                        tensTop.parentElement.classList.remove('flip');
-                        tensTop.textContent = newTens;
-                    }, 1000);
-                }
+                // Добавление класса для анимации
+                tensTop.parentElement.classList.add('flip');
                 
-                // Обновление единиц
-                if (newOnes !== oldOnes) {
-                    onesTop.textContent = oldOnes;
-                    onesBottom.textContent = newOnes;
-                    
-                    // Добавление класса для анимации
-                    onesTop.parentElement.classList.add('flip');
-                    
-                    // Удаление класса после анимации
-                    setTimeout(() => {
-                        onesTop.parentElement.classList.remove('flip');
-                        onesTop.textContent = newOnes;
-                    }, 1000);
-                }
+                // Удаление класса после анимации
+                setTimeout(() => {
+                    tensTop.parentElement.classList.remove('flip');
+                    tensTop.textContent = newTens;
+                }, 500);
+            }
+            
+            // Обновление единиц
+            if (newOnes !== oldOnes) {
+                onesTop.textContent = oldOnes;
+                onesBottom.textContent = newOnes;
+                
+                // Добавление класса для анимации
+                onesTop.parentElement.classList.add('flip');
+                
+                // Удаление класса после анимации
+                setTimeout(() => {
+                    onesTop.parentElement.classList.remove('flip');
+                    onesTop.textContent = newOnes;
+                }, 500);
             }
         }
         
